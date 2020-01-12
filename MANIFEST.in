@@ -1,0 +1,7 @@
+include README.md LICENSE
+recursive-include dinolemma *
+include juliart/fonts/*ttf
+lrecursive-exclude .git *
+prune dinolemma/__pycache__
+prune docs*
+prune img*

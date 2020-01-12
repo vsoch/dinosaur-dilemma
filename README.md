@@ -90,6 +90,37 @@ The game starts with a certain number of dinosaurs (number of total dinosaurs), 
  - size
  - hunger
 
+The game itself (an instance of DinosaurDilemma) under [dinodilemma/game.py](dinodilemma/game.py) creates
+some number of dinosaurs in the following way:
+
+```python
+dinosaurs = Dinosaurs()                                                
+
+dinosaurs
+[14 dinosaurs]
+
+for dino in dinosaurs: 
+    print(dino.name) 
+
+persnickety-muffinpodus
+loopy-tacopodus
+gassy-poodledocus
+frigid-nalgasasaurus
+hanky-dogdocus
+dirty-blackbeanpodus
+astute-truffleus
+loopy-knifeus
+chocolate-noodleisaurus
+psycho-chipiraptor
+muffled-lizardus
+stinky-underoosdocus
+rainbow-cattywampusisaurus
+buttery-saladiraptor
+```
+
+Each is guaranteed to have a unique name, and at maximum we can generate X dinosaurs for the simulation.
+
+### Avocados
 The game also starts with a certain number of avocado saplings.
 
 **under development**
