@@ -5,6 +5,54 @@ characters, interactions, and variables that control those interactions.
 The characters will interact in a basic world and at the end, we will be
 interested to know how they turned out (evolved).
 
+## Development
+
+The way that I'm thinking about this project is in stages. 
+
+### Stage 1: Stateful
+
+#### 1. Environment
+
+The first thing to design is the environment, meaning a stateful base that has a set of variables (e.g., temperature, humidity) that will vary
+on some regular increment and then influence the entities that live in it downstream. For example, a base environment might 
+be defined by a season and day that leads to a particular temperature that has downstream influences on the organisms that live
+in it. If my environment has a function to cycle through a unit (e.g., a day) then I can update it's state, and
+then update the entities in it depending on the new state.
+
+#### 2. Entities
+
+Once the environment is defined, the next level of stateful objects must be defined, the entities that live within
+the environment. The entities should first update themselves based on the changed environment, and then interact.
+Interaction comes down to each entity changing location on some grid, and if the location is in the vicinity
+of another organism, then the interaction occurs.
+
+#### 3. Interactions
+
+Every entity must have defined rules for interaction with other entities. When all entities
+in the simulation change location, those that are within some vicinity of one another
+are allowed to interact. Interaction can further influence the state of the entity,
+or even lead to creation or destruction of said entity.
+
+At the end of the design of stage 1, we will have developed essentially a text based, stateful simulation.
+We will be able to run it with some set of starting conditions, and then observe the interactions
+over a particular number of time steps (days) and some final outcome.
+
+### Stage 2: Graphical
+
+Once the statful simulation is designed, we should strive to visualize it. This
+means (possibly) re-implementation in a browser based language that can render
+objects on a canvas or via the dom (d3.js). We would want to be able to run
+the same text based simulation, and watch it.
+
+### Stage 3: Live
+
+The stateful approach works for early design, but what we would really want is essentially
+a bunch of entities that are co-existing in an environment, and then reacting to one another.
+I think we could try to emulate this with something that looks more like a bunch of
+objects that can emit and subscribe to one another's events, and then know how to
+respond.
+
+
 ## Characters
 
 ### Dinosaurs
