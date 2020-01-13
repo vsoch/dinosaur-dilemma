@@ -8,6 +8,9 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
+import random
+import numpy
+
 
 class DinosaurDilemma:
     """A dinosaur dilemma simulation contains basic variables to control
@@ -32,6 +35,9 @@ class DinosaurDilemma:
             random.choice(range(self.days_in_season)) or days_left_season
         )
 
+        # Initialize a grid for the simulation
+        self.grid = []  # TODO
+
         # Create a set of dinosaurs and avocado trees
         self.dinosaurs = Dinosaurs(number_dinos)
         self.trees = AvocadoTrees(number_trees)
@@ -55,20 +61,26 @@ class DinosaurDilemma:
         chance_humid = 0.5
         if self.season == "winter":
             self.temperature = random.choice(range(0, 32))
-            chance_humid = 0.15
+            chance_humid = 0.1
         elif self.season == "fall":
             self.temperature = random.choice(range(30, 62))
+            chance_humid = 0.6
         elif self.season == "spring":
             self.temperature = random.choice(range(40, 55))
+            chance_humid = 0.4
         elif self.season == "summer":
             self.temperature = random.choice(range(56, 89))
             chance_humid = 0.75
         self.set_humidity(chance_humid)
 
     def set_humidity(self, chance_humid):
-        """Determine the humidity
+        """Determine the humidity, a percentage value.
         """
-        ## TODO: need to understand levels of humidity
+        low_humidity = random.choice(range(30, 50)) * 0.01
+        high_humidity = random.choice(range(50, 80)) * 0.01
+        return numpy.random.choice(
+            [low_humidity, high_humidity], p=[1 - chance_humid, chance_humid]
+        )
 
     # Time
 
@@ -85,10 +97,9 @@ class DinosaurDilemma:
         """For each new day, these is a different value for water and sunlight,
            depending on the season.
         """
-        # 1. Adjust day and season, if necessary
+        # 1. Adjust day and season, and climate
         if self.days_left_season == 1:
             self.season = self.next_season()
             self.days_left_season = 90
 
-        # 2. Climate depends on season
         self.set_climate()

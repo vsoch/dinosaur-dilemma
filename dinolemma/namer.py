@@ -12,14 +12,13 @@ from random import choice
 
 
 class GenericNamer:
-    """The GenericNamer is a class that holds a pre-set number of names.
-       Once we use a prefix or suffix, it's no longer available to initialize
-       the board. New entities (offspring) are named with the same names, but 
-       with an added number to designate the generation
+    """The GenericNamer is a class that allows for generation of names. It's up
+       to the calling client to check for uniqueness.  New entities (offspring) 
+       are named with the same names, but  with an added number to designate
+       the generation
     """
 
     def __init__(self):
-
         self.descriptors = [
             "chunky",
             "buttery",

@@ -41,8 +41,15 @@ class Dinosaurs:
         self.dinosaurs = []
         self.namer = DinosaurNamer()
 
+        names = []
         for _ in range(number):
             name = self.namer.generate()
+
+            # Keep generating name until we get a unique one
+            while name in names:
+                name = self.namer.generate()
+
+            names.append(name)
             self.dinosaurs.append(Dinosaur(name))
 
     def __str__(self):
@@ -73,6 +80,12 @@ class DinosaurNamer(GenericNamer):
             "podus",
         ]
         super().__init__()
+
+    def __str__(self):
+        return "[dinosaur-namer]"
+
+    def __repr__(self):
+        return self.__str__()
 
     def generate(self, delim="-"):
         prefix = self._generate(delim)

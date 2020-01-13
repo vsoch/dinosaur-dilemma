@@ -23,6 +23,7 @@ class AvocadoTree:
            The growth is an equation of the current sunlight and water 
            conditions.
         """
+        # TODO: need to add humidity and temperature here.
         if self.height < 1.0:
             self.height += 0.01
 
@@ -30,6 +31,12 @@ class AvocadoTree:
 class AvocadoNamer(GenericNamer):
     """The AvocadoNamer subclasses a GenericNamer, but adds a tree extension
     """
+
+    def __str__(self):
+        return "[avocado-namer]"
+
+    def __repr__(self):
+        return self.__str__()
 
     def generate(self, delim="-"):
         prefix = self._generate(delim)
