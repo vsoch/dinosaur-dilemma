@@ -15,8 +15,8 @@ import random
 
 
 class Dinosaur(Entity):
-    def __init__(self, name):
-        super().__init__(name=name)
+    def __init__(self, name, can_move=True):
+        super().__init__(name=name, can_move=can_move)
 
         # Baby dinosaurs don't exist, they just get large enough
         self.size = random.choice(range(100)) * 0.01

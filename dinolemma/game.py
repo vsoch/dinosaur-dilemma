@@ -31,6 +31,7 @@ class DinosaurDilemma:
         number_dinos=None,
         number_trees=None,
         grid_size=25,
+        verbose=True,
     ):
 
         # Start in a season to determine the weather
@@ -42,6 +43,7 @@ class DinosaurDilemma:
 
         # Simulation parameters
         self.grid_size = grid_size
+        self.verbose = verbose
 
         # Create a set of dinosaurs and avocado trees
         self.dinosaurs = Dinosaurs(number_dinos)
@@ -53,18 +55,53 @@ class DinosaurDilemma:
         # Progress the first day to set temperature, etc.
         self.newday()
 
+    # Interactions
+
+    def interact(self, entity):
+        """Given an entity, find other entities around it (and have them interact).
+           This is run during a simulation directly after an entity moves.
+        """
+        neighbors = self.get_neighbors(entity.x, entity.y)
+
+        # Since the entity is the one moving, it is considered acting on the neighbor
+        for neighbor in neighbors:
+            entity.interact(neighbor)
+
+    def get_neighbors(self, x, y):
+        """Given an x and y coordinate, find all adjacent entities
+        """
+        neighbors = []
+        for coord in self.get_adjacent_coords(x, y):
+            cx, cy = coord
+            if self.grid[cx, cy]:
+
+                name = self.grid[cx, cy]
+
+                # For each neighbor, currently if it ends in tree, it's a tree
+                if name.endswith("tree"):
+                    neighbors.append(self.trees[name])
+                else:
+                    neighbors.append(self.dinosaurs[name])
+
+        return neighbors
+
     def summary(self):
         """Print a summary of the season, day, and general weather for the 
-           simulation
+           simulation. This is an intermediate step and can be silenced with
+           self.verbose to False.
         """
-        print(
-            "Today is day %s in the %s season." % (self.days_left_season, self.season)
-        )
-        print(
-            "There are %s dinosaurs, and %s avocado trees."
-            % (self.dinosaurs.count, self.trees.count)
-        )
-        print("The temperate is %s°F, humidity %s" % (self.temperature, self.humidity))
+        if self.verbose:
+            print(
+                "Today is day %s in the %s season."
+                % (self.days_left_season, self.season)
+            )
+            print(
+                "There are %s dinosaurs, and %s avocado trees."
+                % (self.dinosaurs.count, self.trees.count)
+            )
+            print(
+                "The temperate is %s°F, humidity %s" % (self.temperature, self.humidity)
+            )
 
     # Grid and movement
 
@@ -84,19 +121,65 @@ class DinosaurDilemma:
         # Allocate each a location on the grid
         for entity in chain(self.dinosaurs, self.trees):
             x, y = choices.pop()
-            self.move(entity, x, y)
+            self._move(entity, x, y)
 
-    def move(self, entity, x, y):
+    def _move(self, entity, x, y):
         """Handle assigning an entity to a new spot, along with assigning the
-           entity name to the spot
+           entity name to the spot. This function expects an x and y coordinate.
+           to move to an open spot, use move() instead.
         """
         # Clear the previous position
         if entity.on_grid:
             self.grid[entity.x, entity.y] = None
 
-        # Set the new location
+            # Set the new location (currently only dinosaurs can move)
+            if self.verbose:
+                print(
+                    "Moving dinosaur %s from (%s,%s) to (%s,%s)"
+                    % (entity.name, entity.x, entity.y, x, y)
+                )
+
         entity.set_location(x, y)
         self.grid[x, y] = entity.name
+
+    def move(self, entity):
+        """Given an entity, move it in the grid. This means that if there
+           are surrounding (other) entities after the move, we interact with
+           them (even if the second entity has not moved yet!) This makes
+           the simulation more interesting, as a single entity can have 
+           multiple interactions per turn.
+        """
+        if entity.can_move:
+
+            # return a list of open coordinates we can move to
+            coords = self.get_open_coords(entity.x, entity.y)
+            x, y = random.choice(coords)
+            self._move(entity, x, y)
+
+    def get_open_coords(self, x, y):
+        """Given an x and y coordinate, return surrounding empty coordinates.
+        """
+        coords = []
+        for coord in self.get_adjacent_coords(x, y):
+            cx, cy = coord
+            if not self.grid[cx, cy]:
+                coords.append((cx, cy))
+        return coords
+
+    def get_adjacent_coords(self, x, y):
+        """Given an x and y coordinate, return surrounding coordinates.
+        """
+        coords = []
+        width, height = self.grid.shape
+        if x - 1 >= 0:
+            coords.append((x - 1, y))  # left
+        if x + 1 < width:
+            coords.append((x + 1, y))  # right
+        if y - 1 >= 0:
+            coords.append((x, y - 1))  # down
+        if y + 1 < height:
+            coords.append((x, y + 1))  # up
+        return coords
 
     # Climate
 
@@ -150,3 +233,20 @@ class DinosaurDilemma:
 
         self.set_climate()
         self.summary()
+
+    def run(self, days=100, verbose=True):
+        """After the grid is initialized and we've set the initial client, 
+           run the simulation for a certain number of days.
+        """
+        self.verbose = verbose
+
+        for day in range(days):
+
+            if self.verbose:
+                print("\nDAY %s" % day)
+
+            # order here is randomized
+            for entity in chain(self.dinosaurs, self.trees):
+                self.move(entity)
+                self.interact(entity)
+                self.newday()

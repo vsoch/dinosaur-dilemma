@@ -13,17 +13,27 @@ import random
 
 
 class Entity:
-    """An Entity is a base class for a living thing in the world.
+    """An Entity is a base class for a living thing in the world. An entity
+       that can move is allowed to change location on the grid.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, can_move=True):
         self.name = name
+        self.can_move = can_move
+
+    def __str__(self):
+        return "[%s: %s]" % (self.__class__.__name__, self.name)
 
     def set_location(self, x, y):
         """set an entity location on the board - an x and y coordinate
         """
         self.x = x
         self.y = y
+
+    def interact(self, entity):
+        """Given a second entity, based on its type, interact with it.
+        """
+        print("%s is interacting with %s" % (self, entity))
 
     @property
     def on_grid(self):
@@ -43,7 +53,7 @@ class Group:
 
     def __init__(self, name, Entity, number=None, namer=None):
         number = number or random.choice(range(15))
-        self.entities = []
+        self.entities = {}
         namer = namer or GenericNamer
         self.namer = namer()
         self.name = name
@@ -57,11 +67,16 @@ class Group:
                 name = self.namer.generate()
 
             names.append(name)
-            self.entities.append(Entity(name))
+            self.entities[name] = Entity(name)
 
     @property
     def count(self):
         return len(self.entities)
+
+    def random(self):
+        """Randomly select an entity"""
+        if len(self.entities) > 0:
+            return random.choice(list(self.entities.values()))
 
     def __str__(self):
         return "[%s %s]" % (self.count, self.name)
@@ -69,6 +84,15 @@ class Group:
     def __repr__(self):
         return self.__str__()
 
-    def __iter__(self):
-        for entity in self.entities:
-            yield entity
+    def __getitem__(self, key):
+        if key in self.entities:
+            return self.entities[key]
+
+    def __iter__(self, randomize=True):
+        """iterator over entities. By default, we randomize the order
+        """
+        entities = list(self.entities.keys())
+        if randomize:
+            random.shuffle(entities)
+        for name in entities:
+            yield self.entities[name]

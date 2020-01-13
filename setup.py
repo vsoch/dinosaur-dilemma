@@ -95,5 +95,5 @@ if __name__ == "__main__":
             "Operating System :: Unix",
             "Programming Language :: Python :: 3.7",
         ],
-        entry_points={"console_scripts": ["dinodilemma=dinodilemma.client:main"]},
+        entry_points={"console_scripts": ["dinolemma=dinolemma.client:main"]},
     )

@@ -9,6 +9,15 @@ interested to know how they turned out (evolved).
 
 ### Python
 
+You can run a simulation (with defaults) from the command line:
+
+```bash
+$ dinolemma run
+Today is day 80 in the winter season.
+There are 5 dinosaurs, and 13 avocado trees.
+The temperate is 12°F, humidity 0.33
+```
+
 You can run a simulation from within Python, either using the defaults:
 
 ```
@@ -41,7 +50,11 @@ then update the entities in it depending on the new state.
 Once the environment is defined, the next level of stateful objects must be defined, the entities that live within
 the environment. The entities should first update themselves based on the changed environment, and then interact.
 Interaction comes down to each entity changing location on some grid, and if the location is in the vicinity
-of another organism, then the interaction occurs.
+of another organism, then the interaction occurs. I thought about whether I wanted all entities to move (and then 
+interact) versus allowing them to interact as they move, and I chose the latter. The reason is because
+we would allow for multiple interactions for any given entity in one turn, and that's more interesting.
+To be fair, I have to ensure that the order of movement is randomized. And notably, avocado trees cannot
+move.
 
 #### 3. Interactions
 
@@ -107,11 +120,13 @@ The game starts with a certain number of dinosaurs (number of total dinosaurs), 
  - size
  - hunger
 
-The game itself (an instance of DinosaurDilemma) under [dinodilemma/game.py](dinodilemma/game.py) creates
+The game itself (an instance of DinosaurDilemma) under [dinolemma/game.py](dinolemma/game.py) creates
 some number of dinosaurs in the following way:
 
 ```python
-dinosaurs = Dinosaurs()                                                
+from dinolemma.dinosaurs import Dinosaurs
+
+dinosaurs = Dinosaurs()
 
 dinosaurs
 [14 dinosaurs]
@@ -135,12 +150,39 @@ rainbow-cattywampusisaurus
 buttery-saladiraptor
 ```
 
-Each is guaranteed to have a unique name, and at maximum we can generate X dinosaurs for the simulation.
+Each is guaranteed to have a unique name, and we check that there are enough
+spaces on the game board to support the dinosaurs and trees created. We
+can also grab a random dinosaur:
+
+```python
+dino = dinosaurs.random()
+dino.name
+'bricky-eagleraptor'
+```
 
 ### Avocados
 The game also starts with a certain number of avocado saplings.
 
-**under development**
+```python
+from dinolemma.avocados import AvocadoTrees
+
+trees = AvocadoTrees()
+for tree in trees:
+    print(tree.name)
+
+hanky-egg-tree
+goodbye-poo-tree
+reclusive-sundae-tree
+muffled-squidward-tree
+```
+
+or grab a random tree:
+
+```python
+tree = trees.random()
+tree
+<dinolemma.avocados.AvocadoTree at 0x7f25347e7860>
+```
 
 Libraries that might be helpful:
 

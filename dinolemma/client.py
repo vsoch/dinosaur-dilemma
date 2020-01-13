@@ -80,9 +80,7 @@ def main():
     # Initialize the JuliaSet
     if args.command == "run":
         simulation = DinosaurDilemma(
-            grid_size=args.grid_size,
-            number_trees=args.ntrees,
-            number_dinosaurs=args.ndinos,
+            grid_size=args.grid_size, number_trees=args.ntrees, number_dinos=args.ndinos
         )
 
     else:
