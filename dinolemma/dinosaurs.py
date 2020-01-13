@@ -9,14 +9,14 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 
-from .namer import GenericNamer
+from dinolemma.entity import Group, Entity
+from dinolemma.namer import GenericNamer
 import random
 
 
-class Dinosaur:
+class Dinosaur(Entity):
     def __init__(self, name):
-
-        self.name = name
+        super().__init__(name=name)
 
         # Baby dinosaurs don't exist, they just get large enough
         self.size = random.choice(range(100)) * 0.01
@@ -30,37 +30,6 @@ class Dinosaur:
            size, whatever unit that happens to be.
         """
         return self.size >= 0.8
-
-
-class Dinosaurs:
-    """A group of dinosaurs
-    """
-
-    def __init__(self, number=None):
-        number = number or random.choice(range(15))
-        self.dinosaurs = []
-        self.namer = DinosaurNamer()
-
-        names = []
-        for _ in range(number):
-            name = self.namer.generate()
-
-            # Keep generating name until we get a unique one
-            while name in names:
-                name = self.namer.generate()
-
-            names.append(name)
-            self.dinosaurs.append(Dinosaur(name))
-
-    def __str__(self):
-        return "[%s dinosaurs]" % len(self.dinosaurs)
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __iter__(self):
-        for dinosaur in self.dinosaurs:
-            yield dinosaur
 
 
 class DinosaurNamer(GenericNamer):
@@ -91,3 +60,13 @@ class DinosaurNamer(GenericNamer):
         prefix = self._generate(delim)
         suffix = self.select(self.suffix)
         return "%s%s" % (prefix, suffix)
+
+
+class Dinosaurs(Group):
+    """A group of dinosaurs
+    """
+
+    def __init__(self, number=None):
+        super().__init__(
+            name="dinosaurs", number=number, Entity=Dinosaur, namer=DinosaurNamer
+        )

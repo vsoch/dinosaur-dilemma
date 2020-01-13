@@ -5,6 +5,23 @@ characters, interactions, and variables that control those interactions.
 The characters will interact in a basic world and at the end, we will be
 interested to know how they turned out (evolved).
 
+## Usage
+
+### Python
+
+You can run a simulation from within Python, either using the defaults:
+
+```
+from dinolemma.game import DinosaurDilemma                              
+
+simulation = DinosaurDilemma()                                          
+Today is day 13 in the summer season.
+There are 1 dinosaurs, and 14 avocado trees.
+The temperate is 59°F, humidity 0.43
+```
+
+or by setting any of the variables (number of dinosaurs or trees, size of grid, etc.)
+
 ## Development
 
 The way that I'm thinking about this project is in stages. 
@@ -124,3 +141,8 @@ Each is guaranteed to have a unique name, and at maximum we can generate X dinos
 The game also starts with a certain number of avocado saplings.
 
 **under development**
+
+Libraries that might be helpful:
+
+ - https://github.com/kentwait/nxsim
+ - pygame?

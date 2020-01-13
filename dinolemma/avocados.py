@@ -8,12 +8,14 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-from .namer import GenericNamer
+from dinolemma.entity import Group, Entity
+from dinolemma.namer import GenericNamer
 import random
 
 
-class AvocadoTree:
-    def __init__(self):
+class AvocadoTree(Entity):
+    def __init__(self, name):
+        super().__init__(name=name)
 
         # The age of an avocado tree is represented by it's height
         self.height = random.choice(range(100)) * 0.01
@@ -41,3 +43,13 @@ class AvocadoNamer(GenericNamer):
     def generate(self, delim="-"):
         prefix = self._generate(delim)
         return "%s%stree" % (prefix, delim)
+
+
+class AvocadoTrees(Group):
+    """A group of avocado trees
+    """
+
+    def __init__(self, number=None):
+        super().__init__(
+            name="trees", number=number, Entity=AvocadoTree, namer=AvocadoNamer
+        )

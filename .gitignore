@@ -1,1 +1,4 @@
+dist
+.eggs
+dinolemma.egg-info
 __pycache__
