@@ -1,11 +1,33 @@
 # Dinosaur Dilemma
 
+[![PyPI version](https://badge.fury.io/py/dinolemma.svg)](https://pypi.org/project/dinolemma/)
+[![GitHub actions status](https://github.com/vsoch/dinolemma/workflows/ci/badge.svg?branch=master)](https://github.com/vsoch/dinolemma/actions?query=branch%3Amaster+workflow%3Aci)
+
 This is the dinosaur dilemma, my first attempt at a simulation. It will involve
 characters, interactions, and variables that control those interactions.
 The characters will interact in a basic world and at the end, we will be
-interested to know how they turned out (evolved).
+interested to know how they turned out (evolved). You can see a verbose
+simulation run <a href="https://asciinema.org/a/293693" target="_blank"><img src="https://asciinema.org/a/293693.svg" />here</a>,
+or a less verbose run below:
+
+[![asciicast](https://asciinema.org/a/293703.svg)](https://asciinema.org/a/293703)
 
 ## Usage
+
+### Install
+
+You can install from pip, or directly from the repository here.
+
+```bash
+pip install dinolemma
+```
+or
+
+```bash
+git clone https://github.com/vsoch/dinosaur-dilemma
+cd dinosaur-dilemma
+python setup.py install
+```
 
 ### Python
 
@@ -185,8 +207,3 @@ tree = trees.random()
 tree
 <dinolemma.avocados.AvocadoTree at 0x7f25347e7860>
 ```
-
-Libraries that might be helpful:
-
- - https://github.com/kentwait/nxsim
- - pygame?

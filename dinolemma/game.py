@@ -34,7 +34,7 @@ class DinosaurDilemma:
         max_temperature=86,  # Fahrenheit, I know, I'm sorry
         min_temperature=0,
         grid_size=25,
-        verbose=True,
+        verbose=False,
     ):
 
         # Start in a season to determine the weather
@@ -139,21 +139,17 @@ class DinosaurDilemma:
 
     def summary(self):
         """Print a summary of the season, day, and general weather for the 
-           simulation. This is an intermediate step and can be silenced with
-           self.verbose to False.
+           simulation.
         """
-        if self.verbose:
-            print(
-                "Today is day %s in the %s season."
-                % (self.days_left_season, self.season)
-            )
-            print(
-                "There are %s dinosaurs, and %s avocado trees."
-                % (self.dinosaurs.count, self.trees.count)
-            )
-            print(
-                "The temperate is %s°F, humidity %s" % (self.temperature, self.humidity)
-            )
+        print(
+            "There are %s days left in the %s season."
+            % (self.days_left_season, self.season)
+        )
+        print(
+            "There are %s dinosaurs, and %s avocado trees."
+            % (self.dinosaurs.count, self.trees.count)
+        )
+        print("The temperate is %s°F, humidity %s" % (self.temperature, self.humidity))
 
     # Grid and movement
 
@@ -293,14 +289,15 @@ class DinosaurDilemma:
            depending on the season.
         """
         # 1. Adjust day and season, and climate
-        if self.days_left_season == 1:
+        if self.days_left_season == 0:
             self.season = self.next_season()
-            self.days_left_season = 90
+            self.days_left_season = self.days_in_season
 
+        self.days_left_season -= 1
         self.set_climate()
         self.summary()
 
-    def run(self, days=100, verbose=True, delay=1):
+    def run(self, days=100, verbose=False, delay=1):
         """After the grid is initialized and we've set the initial client, 
            run the simulation for a certain number of days. Also add a delay
            (seconds) to sleep between days
@@ -309,8 +306,7 @@ class DinosaurDilemma:
 
         for day in range(days):
 
-            if self.verbose is True:
-                print("\nDAY %s" % day)
+            print("\nDAY %s" % day)
 
             self.newday()
 

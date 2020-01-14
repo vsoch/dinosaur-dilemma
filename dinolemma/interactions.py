@@ -19,12 +19,13 @@ def dinosaurXdinosaur(dino1, dino2):
        interaction are possible (e.g., mate then death, fight then mate, etc.).
     """
     outcomes = {}
-    print("%s is interacting with %s" % (dino1, dino2))
+    print("INTERACT: %s and %s" % (dino1, dino2))
 
     # Case 1: a male/female dinosaur can mate
     if dino1.gender != "hybrid" and dino2.gender != "hybrid":
         if dino1.gender != dino2.gender:
             if dino1.reproduce(entity=dino2):
+                print("REPRODUCE: %s and %s!" % (dino1, dino2))
                 outcomes["reproduce"] = True
 
     # Case 2: Any two dinosaurs can fight, depending on the aggressiveness
@@ -48,13 +49,25 @@ def dinosaurXavocado(dino, tree):
        and finds an avocado tree.
     """
     outcomes = {}
-    print("%s is interacting with %s" % (dino, tree))
+    print("INTERACT: %s and %s" % (dino, tree))
 
     # Case 1: The tree is mature with avocados, the dinosaur eats some
     if tree.is_mature and tree.avocados > 0:
         eaten = random.choice(range(tree.avocados))
-        dino.hunger = dino.hunger + (0.1 * eaten)
+
+        # If we eat avocados and the tree is sick, it makes us more hungry
+        if eaten > 0 and tree.is_diseased:
+            dino.hunger = dino.hunger - (0.1 * eaten)
+            print("EATING %s %s avocados from a diseased tree!" % (dino, eaten))
+        else:
+            dino.hunger = dino.hunger + (0.1 * eaten)
+            print("EATING %s %s avocados!" % (dino, eaten))
         tree.avocados -= eaten
-        print("EATEN %s %s avocados!" % (dino, eaten))
+
+    # Case 2: An avocado tree that is small enough can be trampled
+    if tree.height <= 0.10:
+        if random.choice([True, False]):
+            print("TRAMPLED: %s by %s" % (tree, dino))
+            outcomes["death"] = tree
 
     return outcomes
