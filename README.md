@@ -1,7 +1,7 @@
 # Dinosaur Dilemma
 
 [![PyPI version](https://badge.fury.io/py/dinolemma.svg)](https://pypi.org/project/dinolemma/)
-[![GitHub actions status](https://github.com/vsoch/dinolemma/workflows/ci/badge.svg?branch=master)](https://github.com/vsoch/dinolemma/actions?query=branch%3Amaster+workflow%3Aci)
+[![GitHub actions status](https://github.com/vsoch/dinosaur-dilemma/workflows/ci/badge.svg?branch=master)](https://github.com/vsoch/dinosaur-dilemma/actions?query=branch%3Amaster+workflow%3Aci)
 
 This is the dinosaur dilemma, my first attempt at a simulation. It will involve
 characters, interactions, and variables that control those interactions.
