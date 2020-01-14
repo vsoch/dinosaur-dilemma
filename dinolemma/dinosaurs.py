@@ -50,6 +50,12 @@ class Dinosaur(Entity):
         stats = {"hunger": self.hunger, "size": self.size}
         return stats
 
+    @property
+    def is_aggressive(self):
+        """Regardless of size, a starving dinosaur is aggressive
+        """
+        return self.hunger > 0.9
+
     def reproduce(self, **kwargs):
         """If a dinosaur is a hybrid, it can reproduce on it's own. Otherwise,
            it requires another dinosaur.
@@ -107,7 +113,7 @@ class Dinosaur(Entity):
         humidity = kwargs.get("humidity", 0.5)
 
         # Larger dinosaurs get hungrier faster
-        self.hunger = max(1, self.hunger + numpy.power(self.size, 10))
+        self.hunger = max(0, self.hunger + numpy.power(self.size, 10))
 
         # Dinosaurs can freeze to death (under 10 degrees) or boil
         if temperature <= self.freezing_point:

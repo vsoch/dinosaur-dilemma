@@ -70,7 +70,18 @@ class DinosaurDilemma:
 
         # Since the entity is the one moving, it is considered acting on the neighbor
         for neighbor in neighbors:
-            entity.interact(neighbor)
+            outcomes = entity.interact(neighbor)
+
+            # Reproduction with the neighbor (only possible for dinosaurs)
+            if "reproduce" in outcomes:
+                self.reproduce(entity)
+
+            # A dinosaur kills another dinosaur, or an avocado tree
+            if "death" in outcomes:
+                self.remove(outcomes["death"])
+
+            # Other cases are handled during interaction, including:
+            # - dinosaur eating an avocado
 
     def remove(self, entity):
         """If an entity dies (or is otherwise killed) remove from the grid
@@ -103,23 +114,21 @@ class DinosaurDilemma:
 
         return neighbors
 
-    def reproduce(self, entity):
-        """An entity is able to sometimes reproduce on its own, either
-           in the case of an avocado tree, or a hybrid dinosaur. This function
-           runs for that case on each simulation step. If two entities are to
-           reproduce, this should be done during the interact() step.
+    def reproduce(self, parent):
+        """Given that an entity reproduces (via interaction) or on its own,
+           this function generates the new entity (depending on the parent
+           type) and places it on the grid.
         """
-        if entity.reproduce():
-            if entity.name.endswith("tree"):
-                offspring = self.trees.new()
-            else:
-                offspring = self.dinosaurs.new()
+        if parent.name.endswith("tree"):
+            offspring = self.trees.new()
+        else:
+            offspring = self.dinosaurs.new()
 
-            # Place the new offspring on the board
-            coords = self.get_open_coords(entity.x, entity.y)
-            x, y = random.choice(coords)
-            self._move(offspring, x, y)
-            print("Joy! Welcome %s to the world at (%s,%s)" % (offspring, x, y))
+        # Place the new offspring on the board
+        coords = self.get_open_coords(parent.x, parent.y)
+        x, y = random.choice(coords)
+        self._move(offspring, x, y)
+        print("Joy! Welcome %s to the world at (%s,%s)" % (offspring, x, y))
 
     def change(self, entity):
         """After moving, an entity can change depending on it's environment.
@@ -316,7 +325,12 @@ class DinosaurDilemma:
 
                 self.move(entity)
                 self.change(entity)
-                self.reproduce(entity)
+
+                # Does the entity reproduce on its own?
+                if entity.reproduce():
+                    self.reproduce(entity)
+
+                # Have the entity interact with its neighbors
                 self.interact(entity)
 
             time.sleep(delay)

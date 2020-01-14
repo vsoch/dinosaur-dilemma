@@ -34,11 +34,15 @@ class Entity:
     def interact(self, entity):
         """Given a second entity, based on its type, interact with it.
         """
+        outcomes = {}
+
         # Is the entity type supported as an interaction?
         if entity.type in self._interactions:
 
             # The interaction function expects the moving entity as first argument
-            self._interactions[entity.type](self, entity)
+            # A dictionary of outcomes should be returned
+            outcomes = self._interactions[entity.type](self, entity)
+        return outcomes
 
     def reproduce(self, **kwargs):
         """By default, an entity will not reproduce (this function returns false)
@@ -105,7 +109,9 @@ class Group:
     def new(self, **kwargs):
         """Create a new entity"""
         name = self.namer.generate()
-        self.entities[name] = self.Entity(name, **kwargs)
+        entity = self.Entity(name, **kwargs)
+        self.entities[name] = entity
+        return entity
 
     @property
     def count(self):
