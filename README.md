@@ -94,12 +94,14 @@ attributes:
  - **hunger**: each dinosaur is hungry, and gets more hungry as the simulation progresses. If the dinosaur enconuters a ripe avocado, he will eat it and the hunger subside. Each dinosaur has a slightly different threshold for deciding to eat.
  - **size**: each dinosaur has a randomly set size. A larger dinosaur is obviously requiring more food than a smaller one, and a larger one is also advantaged to be able to eat a smaller dinosaur, if desperate.
  - **disease**: if a dinosaur is hungry and eats an avocado or another dinosaur with a disease, he can get sick. A sick dinosaur moves less, and thus has a greater chance of dying due to hunger or even being eaten by another dinosaur.
+ - **gender**: A dinosaur has a 45% change of being male or female, and a 10% chance of being a hybrid, which can reproduce without a mate. Only mature dinosaurs (greater than or equal to 80% of their full adult size) can reproduce, and with every interaction, there is only some small percentage of it.
 
 The dinosaur has the following actions:
 
  - **move**: for each turn of the game, the dinosaur moves, and then interacts with whatever he finds in his new spot.
  - **eat**: a dinosaur can choose to eat an avocado, or even another dinosaur, depending on the size and level of hunger.
  - **sleep** a dinosaur can choose to sleep (with some probability) if he is sick to increase the chance of getting better.
+ - **reproduce** a dinosaur that encounters another dinosaur (mature of the opposite gender) has some percent change of reproduction.
 
 ### Avocados
 

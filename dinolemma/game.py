@@ -14,6 +14,7 @@ from dinolemma.avocados import AvocadoTrees
 import random
 import numpy
 import sys
+import time
 
 
 class DinosaurDilemma:
@@ -30,6 +31,8 @@ class DinosaurDilemma:
         days_in_season=90,
         number_dinos=None,
         number_trees=None,
+        max_temperature=86,  # Fahrenheit, I know, I'm sorry
+        min_temperature=0,
         grid_size=25,
         verbose=True,
     ):
@@ -37,6 +40,8 @@ class DinosaurDilemma:
         # Start in a season to determine the weather
         self.days_in_season = days_in_season
         self.season = random.choice(["summer", "spring", "winter", "fall"]) or season
+        self.min_temperature = min_temperature
+        self.max_temperature = max_temperature
         self.days_left_season = (
             random.choice(range(self.days_in_season)) or days_left_season
         )
@@ -67,6 +72,19 @@ class DinosaurDilemma:
         for neighbor in neighbors:
             entity.interact(neighbor)
 
+    def remove(self, entity):
+        """If an entity dies (or is otherwise killed) remove from the grid
+           and list of entities.
+        """
+        name = entity.name
+
+        # Remove from the grid, and then the entities list
+        self.grid[entity.x, entity.y] = None
+        if name.endswith("tree"):
+            del self.trees[name]
+        else:
+            del self.dinosaurs[name]
+
     def get_neighbors(self, x, y):
         """Given an x and y coordinate, find all adjacent entities
         """
@@ -84,6 +102,31 @@ class DinosaurDilemma:
                     neighbors.append(self.dinosaurs[name])
 
         return neighbors
+
+    def reproduce(self, entity):
+        """An entity is able to sometimes reproduce on its own, either
+           in the case of an avocado tree, or a hybrid dinosaur. This function
+           runs for that case on each simulation step. If two entities are to
+           reproduce, this should be done during the interact() step.
+        """
+        if entity.reproduce():
+            if entity.name.endswith("tree"):
+                offspring = self.trees.new()
+            else:
+                offspring = self.dinosaurs.new()
+
+            # Place the new offspring on the board
+            coords = self.get_open_coords(entity.x, entity.y)
+            x, y = random.choice(coords)
+            self._move(offspring, x, y)
+            print("Joy! Welcome %s to the world at (%s,%s)" % (offspring, x, y))
+
+    def change(self, entity):
+        """After moving, an entity can change depending on it's environment.
+           Each entity should have a change function that accepts any or all
+           current environment variables.
+        """
+        entity.change(**self.get_environment())
 
     def summary(self):
         """Print a summary of the season, day, and general weather for the 
@@ -183,13 +226,27 @@ class DinosaurDilemma:
 
     # Climate
 
+    def get_environment(self):
+        """A general function that returns a lookup of the environment
+        """
+        environ = {
+            "humidity": self.humidity,
+            "temperature": self.temperature,
+            "season": self.season,
+            "days_in_season": self.days_in_season,
+            "days_left_season": self.days_left_season,
+            "number_dinos": self.dinosaurs.count,
+            "number_trees": self.trees.count,
+        }
+        return environ
+
     def set_climate(self):
         """Set the climate, meaning the temperature (depending on the season)
            and the humidity (also largely depending on the season
         """
         chance_humid = 0.5
         if self.season == "winter":
-            self.temperature = random.choice(range(0, 32))
+            self.temperature = random.choice(range(self.min_temperature, 32))
             chance_humid = 0.1
         elif self.season == "fall":
             self.temperature = random.choice(range(30, 62))
@@ -198,7 +255,7 @@ class DinosaurDilemma:
             self.temperature = random.choice(range(40, 55))
             chance_humid = 0.4
         elif self.season == "summer":
-            self.temperature = random.choice(range(56, 89))
+            self.temperature = random.choice(range(56, self.max_temperature))
             chance_humid = 0.75
         self.set_humidity(chance_humid)
 
@@ -234,19 +291,32 @@ class DinosaurDilemma:
         self.set_climate()
         self.summary()
 
-    def run(self, days=100, verbose=True):
+    def run(self, days=100, verbose=True, delay=1):
         """After the grid is initialized and we've set the initial client, 
-           run the simulation for a certain number of days.
+           run the simulation for a certain number of days. Also add a delay
+           (seconds) to sleep between days
         """
         self.verbose = verbose
 
         for day in range(days):
 
-            if self.verbose:
+            if self.verbose is True:
                 print("\nDAY %s" % day)
 
-            # order here is randomized
+            self.newday()
+
+            # order here is randomized. We move, change, and then interact
             for entity in chain(self.dinosaurs, self.trees):
+
+                # An entity could have died on a previous term (starve or fight)
+                if entity.is_dead:
+                    print("DEAD: %s" % entity)
+                    self.remove(entity)
+                    continue
+
                 self.move(entity)
+                self.change(entity)
+                self.reproduce(entity)
                 self.interact(entity)
-                self.newday()
+
+            time.sleep(delay)

@@ -20,9 +20,10 @@ class Entity:
     def __init__(self, name, can_move=True):
         self.name = name
         self.can_move = can_move
+        self._interactions = {}
 
     def __str__(self):
-        return "[%s: %s]" % (self.__class__.__name__, self.name)
+        return "[%s: %s]" % (self.type, self.name)
 
     def set_location(self, x, y):
         """set an entity location on the board - an x and y coordinate
@@ -33,7 +34,33 @@ class Entity:
     def interact(self, entity):
         """Given a second entity, based on its type, interact with it.
         """
-        print("%s is interacting with %s" % (self, entity))
+        # Is the entity type supported as an interaction?
+        if entity.type in self._interactions:
+
+            # The interaction function expects the moving entity as first argument
+            self._interactions[entity.type](self, entity)
+
+    def reproduce(self, **kwargs):
+        """By default, an entity will not reproduce (this function returns false)
+           however the subclass should instantiate the function to have a custom
+           reproductive behavior
+        """
+        return False
+
+    def change(self, **kwargs):
+        """The change function should accept any number of variables from
+           the environment, and the entity is free to use them as needed.
+           If no change function is subclassed, the entity does not change
+        """
+        pass
+
+    @property
+    def is_dead(self):
+        """By default, this function always returns True (entities do not die).
+           It's up to the subclass to decide under what conditions an entity
+           can die.
+        """
+        return False
 
     @property
     def on_grid(self):
@@ -42,6 +69,11 @@ class Entity:
         if hasattr(self, "x") and hasattr(self, "y"):
             return True
         return False
+
+    @property
+    def type(self):
+        """Return the type of an entity"""
+        return self.__class__.__name__
 
 
 class Group:
@@ -57,6 +89,7 @@ class Group:
         namer = namer or GenericNamer
         self.namer = namer()
         self.name = name
+        self.Entity = Entity
 
         names = []
         for _ in range(number):
@@ -68,6 +101,11 @@ class Group:
 
             names.append(name)
             self.entities[name] = Entity(name)
+
+    def new(self, **kwargs):
+        """Create a new entity"""
+        name = self.namer.generate()
+        self.entities[name] = self.Entity(name, **kwargs)
 
     @property
     def count(self):
@@ -87,6 +125,9 @@ class Group:
     def __getitem__(self, key):
         if key in self.entities:
             return self.entities[key]
+
+    def __delitem__(self, key):
+        del self.entities[key]
 
     def __iter__(self, randomize=True):
         """iterator over entities. By default, we randomize the order
