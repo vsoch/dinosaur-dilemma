@@ -36,30 +36,35 @@ def get_parser():
     )
 
     run = subparsers.add_parser("run", help="run a Dinosaur Dilemma simulation")
-
-    run.add_argument(
-        "--ndinos",
-        dest="ndinos",
-        help="the number of dinosaurs to simulate.",
-        type=int,
-        default=None,
+    gui = subparsers.add_parser(
+        "gui", help="run a Dinosaur Dilemma simulation in the graphical interface"
     )
 
-    run.add_argument(
-        "--ntrees",
-        dest="ntrees",
-        help="the number of avocado trees to simulate.",
-        type=int,
-        default=None,
-    )
+    for command in [run, gui]:
+        command.add_argument(
+            "--ndinos",
+            dest="ndinos",
+            help="the number of dinosaurs to simulate.",
+            type=int,
+            default=None,
+        )
 
-    run.add_argument(
-        "--grid_size",
-        dest="grid_size",
-        help="the size of the square grid, in units (one dimension).",
-        type=int,
-        default=25,
-    )
+        command.add_argument(
+            "--ntrees",
+            dest="ntrees",
+            help="the number of avocado trees to simulate.",
+            type=int,
+            default=None,
+        )
+
+        command.add_argument(
+            "--grid_size",
+            dest="grid_size",
+            help="the size of the square grid, in units (one dimension).",
+            type=int,
+            default=25,
+        )
+
     return parser
 
 
@@ -77,10 +82,19 @@ def main():
         print(dinolemma.__version__)
         sys.exit(0)
 
-    # Initialize the JuliaSet
+    # Run text based simulation
     if args.command == "run":
         simulation = DinosaurDilemma(
             grid_size=args.grid_size, number_trees=args.ntrees, number_dinos=args.ndinos
+        )
+        simulation.run()
+
+    # Run graphical simulation
+    elif args.command == "gui":
+        from dinolemma.gui import run_game
+
+        run_game(
+            grid_dim=args.grid_size, number_trees=args.ntrees, number_dinos=args.ndinos
         )
 
     else:

@@ -126,9 +126,15 @@ class DinosaurDilemma:
 
         # Place the new offspring on the board
         coords = self.get_open_coords(parent.x, parent.y)
-        x, y = random.choice(coords)
-        self._move(offspring, x, y)
-        print("Joy! Welcome %s to the world at (%s,%s)" % (offspring, x, y))
+
+        # Cramped dinos can't reproduce
+        if coords:
+            x, y = random.choice(coords)
+            self._move(offspring, x, y)
+            print("Joy! Welcome %s to the world at (%s,%s)" % (offspring, x, y))
+        else:
+            print("%s is too cramped to reproduce!" % parent)
+            self.remove(offspring)
 
     def change(self, entity):
         """After moving, an entity can change depending on it's environment.
@@ -137,10 +143,26 @@ class DinosaurDilemma:
         """
         entity.change(**self.get_environment())
 
-    def summary(self):
+    def summary(self, return_summary=False):
         """Print a summary of the season, day, and general weather for the 
-           simulation.
+           simulation. If return summary is True, instead return as text
+           for rendering elsewhere.
         """
+        if return_summary:
+            return (
+                "There are %s days left in the %s season. \n"
+                "There are %s dinosaurs, and %s avocado trees. \n"
+                "The temperate is %s°F, humidity %0.2f"
+                % (
+                    self.days_left_season,
+                    self.season,
+                    self.dinosaurs.count,
+                    self.trees.count,
+                    self.temperature,
+                    self.humidity,
+                )
+            )
+
         print(
             "There are %s days left in the %s season."
             % (self.days_left_season, self.season)
@@ -201,8 +223,11 @@ class DinosaurDilemma:
 
             # return a list of open coordinates we can move to
             coords = self.get_open_coords(entity.x, entity.y)
-            x, y = random.choice(coords)
-            self._move(entity, x, y)
+
+            # The entity is surrounded if none to choose from!
+            if coords:
+                x, y = random.choice(coords)
+                self._move(entity, x, y)
 
     def get_open_coords(self, x, y):
         """Given an x and y coordinate, return surrounding empty coordinates.
@@ -305,28 +330,32 @@ class DinosaurDilemma:
         self.verbose = verbose
 
         for day in range(days):
-
             print("\nDAY %s" % day)
-
-            self.newday()
-
-            # order here is randomized. We move, change, and then interact
-            for entity in chain(self.dinosaurs, self.trees):
-
-                # An entity could have died on a previous term (starve or fight)
-                if entity.is_dead:
-                    print("DEAD: %s" % entity)
-                    self.remove(entity)
-                    continue
-
-                self.move(entity)
-                self.change(entity)
-
-                # Does the entity reproduce on its own?
-                if entity.reproduce():
-                    self.reproduce(entity)
-
-                # Have the entity interact with its neighbors
-                self.interact(entity)
-
+            self.run_day()
             time.sleep(delay)
+
+    def run_day(self):
+        """manually run a day (an alternative to "run"). This function
+           also returns a data structure that can be used to update some
+           graphical rendering of the result.
+        """
+        self.newday()
+
+        # order here is randomized. We move, change, and then interact
+        for entity in chain(self.dinosaurs, self.trees):
+
+            # An entity could have died on a previous term (starve or fight)
+            if entity.is_dead:
+                print("DEAD: %s" % entity)
+                self.remove(entity)
+                continue
+
+            self.move(entity)
+            self.change(entity)
+
+            # Does the entity reproduce on its own?
+            if entity.reproduce():
+                self.reproduce(entity)
+
+            # Have the entity interact with its neighbors
+            self.interact(entity)

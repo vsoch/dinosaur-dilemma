@@ -8,7 +8,7 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-__version__ = "0.0.1"
+__version__ = "0.0.11"
 AUTHOR = "Vanessa Sochat"
 AUTHOR_EMAIL = "vsochat@stanford.edu"
 NAME = "dinolemma"
@@ -23,6 +23,6 @@ LICENSE = "LICENSE"
 
 INSTALL_REQUIRES = (("numpy", {"min_version": "1.16.2"}),)
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)
-ANIMATE_REQUIRES = (("imageio", {"min_version": "2.5.0"}),)
+GAME_REQUIRES = (("pygame", {"min_version": "1.9.6"}),)
 
-INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + ANIMATE_REQUIRES
+INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + GAME_REQUIRES
