@@ -3,16 +3,20 @@
 [![PyPI version](https://badge.fury.io/py/dinolemma.svg)](https://pypi.org/project/dinolemma/)
 [![GitHub actions status](https://github.com/vsoch/dinosaur-dilemma/workflows/ci/badge.svg?branch=master)](https://github.com/vsoch/dinosaur-dilemma/actions?query=branch%3Amaster+workflow%3Aci)
 
-![https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/dinosaur-dilemma.png](https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/dinosaur-dilemma.png)
+![https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/dinosaur-dilemma.gif](https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/dinosaur-dilemma.gif)
 
-This is the dinosaur dilemma, my first attempt at a simulation. It will involve
+This is the dinosaur dilemma, my first attempt at a simulation. It involves
 characters, interactions, and variables that control those interactions.
-The characters will interact in a basic world and at the end, we will be
-interested to know how they turned out (evolved). You can see a verbose
-simulation run <a href="https://asciinema.org/a/293693" target="_blank"><img src="https://asciinema.org/a/293693.svg" />here</a>,
-or a less verbose run below:
+The characters interact in a basic world and at the end, we are
+interested to know how they turned out (evolved) given the parameters of the simulation. 
+You can see a verbose text simulation run <a href="https://asciinema.org/a/293693" target="_blank"><img src="https://asciinema.org/a/293693.svg" />here</a>,
+or a less verbose (text) run below:
 
 [![asciicast](https://asciinema.org/a/293703.svg)](https://asciinema.org/a/293703)
+
+A gif of the graphical interface to run the same simulation is shown above, and a static image below!
+
+![https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/dinosaur-dilemma.png](https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/dinosaur-dilemma.png)
 
 ## Usage
 
