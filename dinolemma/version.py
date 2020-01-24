@@ -8,12 +8,12 @@ with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 """
 
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 AUTHOR = "Vanessa Sochat"
 AUTHOR_EMAIL = "vsochat@stanford.edu"
 NAME = "dinolemma"
 PACKAGE_URL = "http://www.github.com/vsoch/dinosaur-dilemma"
-KEYWORDS = "simulation, dinosaur, avocados"
+KEYWORDS = "simulation, dinosaur, avocados, pygame"
 DESCRIPTION = "Simulate evolution of dinosaurs and avocado trees"
 LICENSE = "LICENSE"
 

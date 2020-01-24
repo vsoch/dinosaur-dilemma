@@ -89,8 +89,11 @@ class DinosaurDilemma:
         """
         name = entity.name
 
-        # Remove from the grid, and then the entities list
-        self.grid[entity.x, entity.y] = None
+        # Remove from the grid, if added
+        if hasattr(entity, "x"):
+            self.grid[entity.x, entity.y] = None
+
+        # Remove from the entities list
         if name.endswith("tree"):
             del self.trees[name]
         else:

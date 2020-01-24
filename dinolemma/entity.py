@@ -36,6 +36,10 @@ class Entity:
         """
         outcomes = {}
 
+        # if the entity was removed before having a chance to interact
+        if not entity:
+            return outcomes
+
         # Is the entity type supported as an interaction?
         if entity.type in self._interactions:
 
@@ -142,4 +146,6 @@ class Group:
         if randomize:
             random.shuffle(entities)
         for name in entities:
-            yield self.entities[name]
+            # For the chance that the iterator was created before removing
+            if name in self.entities:
+                yield self.entities[name]
