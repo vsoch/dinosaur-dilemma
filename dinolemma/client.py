@@ -87,6 +87,7 @@ def main():
         simulation = DinosaurDilemma(
             grid_size=args.grid_size, number_trees=args.ntrees, number_dinos=args.ndinos
         )
+        simulation.run()
 
     # Run graphical simulation
     elif args.command == "gui":
