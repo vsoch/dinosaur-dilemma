@@ -39,6 +39,11 @@ pip install dinolemma[game]
 pip install pygame
 ```
 
+I find it very appropriate and lovely that the ubuntu icon for the pygame 
+window is a tiny dinosaur :)
+
+![https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/pygame.png](https://raw.githubusercontent.com/vsoch/dinosaur-dilemma/master/img/pygame.png)
+
 ### Command
 
 You can run a text simulation (with defaults) from the command line:
@@ -134,7 +139,7 @@ over a particular number of time steps (days) and some final outcome.
 
 ### Stage 2: Graphical
 
-Once the statful simulation is designed, we should strive to visualize it. This
+Once the stateful simulation is designed, we should strive to visualize it. This
 means (possibly) re-implementation in a browser based language that can render
 objects on a canvas or via the dom (d3.js). We would want to be able to run
 the same text based simulation, and watch it.
