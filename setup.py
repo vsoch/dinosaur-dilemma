@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     INSTALL_REQUIRES = get_reqs(lookup)
     TESTS_REQUIRES = get_reqs(lookup, "TESTS_REQUIRES")
-    ANIMATE_REQUIRES = get_reqs(lookup, "ANIMATE_REQUIRES")
+    GAME_REQUIRES = get_reqs(lookup, "GAME_REQUIRES")
     setup(
         name=NAME,
         version=VERSION,
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         setup_requires=["pytest-runner"],
         install_requires=INSTALL_REQUIRES,
         tests_require=TESTS_REQUIRES,
-        extras_require={"animate": ANIMATE_REQUIRES},
+        extras_require={"game": GAME_REQUIRES},
         classifiers=[
             "Intended Audience :: Science/Research",
             "Intended Audience :: Developers",

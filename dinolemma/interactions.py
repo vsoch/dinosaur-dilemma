@@ -33,6 +33,8 @@ def dinosaurXdinosaur(dino1, dino2):
 
         # The probability of fighting is the mean of the hunger
         p_fight = (dino1.hunger + dino2.hunger) / 2
+        if p_fight > 1.0:
+            p_fight = 1.0
         they_fight = numpy.random.choice([True, False], p=[p_fight, 1 - p_fight])
 
         # If they fight, if the strength difference is big enough, the smaller one dies

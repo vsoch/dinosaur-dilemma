@@ -3,6 +3,8 @@
 [![PyPI version](https://badge.fury.io/py/dinolemma.svg)](https://pypi.org/project/dinolemma/)
 [![GitHub actions status](https://github.com/vsoch/dinosaur-dilemma/workflows/ci/badge.svg?branch=master)](https://github.com/vsoch/dinosaur-dilemma/actions?query=branch%3Amaster+workflow%3Aci)
 
+![img/dinosaur-dilemma.png](img/dinosaur-dilemma.png)
+
 This is the dinosaur dilemma, my first attempt at a simulation. It will involve
 characters, interactions, and variables that control those interactions.
 The characters will interact in a basic world and at the end, we will be
@@ -29,9 +31,9 @@ cd dinosaur-dilemma
 python setup.py install
 ```
 
-### Python
+### Command
 
-You can run a simulation (with defaults) from the command line:
+You can run a text simulation (with defaults) from the command line:
 
 ```bash
 $ dinolemma run
@@ -39,6 +41,39 @@ Today is day 80 in the winter season.
 There are 5 dinosaurs, and 13 avocado trees.
 The temperate is 12°F, humidity 0.33
 ```
+
+or a (more fun) graphical simulation (press enter to cycle through days):
+
+```bash
+dinolemma gui
+```
+
+The gui takes the same input parameters as the run.
+
+```bash
+dinolemma gui --help
+usage: dinolemma gui [-h] [--ndinos NDINOS] [--ntrees NTREES]
+                     [--grid_size GRID_SIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --ndinos NDINOS       the number of dinosaurs to simulate.
+  --ntrees NTREES       the number of avocado trees to simulate.
+  --grid_size GRID_SIZE
+                        the size of the square grid, in units (one dimension).
+```
+
+If you want a more interesting simulation, try adding a lot more dinosaurs
+or trees!
+
+```bash
+dinolemma gui --ndinos 100 --ntrees 30
+```
+
+What you'll likely see given those ratios are that the dinosaurs (purple) eat one another 
+(or starve) and then the trees (green) grow to take up the game board.
+
+### Python
 
 You can run a simulation from within Python, either using the defaults:
 
