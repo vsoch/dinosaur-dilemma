@@ -31,6 +31,14 @@ cd dinosaur-dilemma
 python setup.py install
 ```
 
+If you want to use the GUI you will need pygame. Any of the following will work.
+
+```bash
+pip install .[game]
+pip install dinolemma[game]
+pip install pygame
+```
+
 ### Command
 
 You can run a text simulation (with defaults) from the command line:
